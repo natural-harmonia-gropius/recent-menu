@@ -1,2 +1,2 @@
-# recent-menu
-recent menu for mpv integrated with uosc
+# Recent menu
+It works, just works
