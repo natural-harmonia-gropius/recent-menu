@@ -111,6 +111,17 @@ function get_filename_without_ext(filename)
     return filename
 end
 
+function swap(a, b)
+    local t = a
+    a = b
+    b = t
+    return a, b
+end
+
+function is_protocol(path)
+    return type(path) == 'string' and (path:find('^%a[%a%d-_]+://') ~= nil or path:find('^%a[%a%d-_]+:\\?') ~= nil)
+end
+
 function on_load()
     local path = mp.get_property("path")
     if not path then return end
@@ -119,6 +130,9 @@ function on_load()
     local title = mp.get_property("media-title") or path
     if filename == title or filename_without_ext == title then
         title = ""
+    end
+    if is_protocol(path) and title and title ~= "" then
+        filename, title = swap(filename, title)
     end
     append_item(path, filename, title)
 end
