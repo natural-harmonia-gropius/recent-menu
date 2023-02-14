@@ -2,11 +2,12 @@ local utils = require("mp.utils")
 local options = require("mp.options")
 
 local o = {
+    path = "~~/recent.json",
     length = 10,
 }
 options.read_options(o)
 
-local path = mp.command_native({ "expand-path", "~~/recent.json" })
+local path = mp.command_native({ "expand-path", o.path })
 
 local menu = {
     type = 'recent_menu',
