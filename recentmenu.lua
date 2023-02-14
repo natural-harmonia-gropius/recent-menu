@@ -37,9 +37,9 @@ function write_json()
     json_file:close()
 end
 
-function append_item(title, path)
+function append_item(path, filename, title)
     local new_items = {}
-    new_items[1] = { title = title, value = { "loadfile", path } }
+    new_items[1] = { title = filename, hint = title, value = { "loadfile", path } }
     for index, value in ipairs(menu.items) do
         if #new_items < o.length and value.value ~= "ignore" and value.value[2] ~= path then
             new_items[#new_items + 1] = value
@@ -55,11 +55,21 @@ function open_menu()
     mp.commandv('script-message-to', 'uosc', 'open-menu', json)
 end
 
+function get_filename(filename)
+    local idx = filename:match(".+()%.%w+$") --获取文件后缀
+    if idx then
+        filename = filename:sub(1, idx - 1)
+    end
+    return filename
+end
+
 function on_load()
     local path = mp.get_property("path")
     if not path then return end
+    local filename = get_filename(mp.get_property("filename"))
     local title = mp.get_property("media-title") or path
-    append_item(title, path)
+    if filename == title then title = "" end
+    append_item(path, filename, title)
 end
 
 mp.add_key_binding(nil, "open", open_menu)
