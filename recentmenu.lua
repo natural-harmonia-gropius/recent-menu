@@ -10,7 +10,7 @@ local path = mp.command_native({ "expand-path", "~~/recent.json" })
 
 local menu = {
     type = 'recent_menu',
-    title = 'Recent',
+    title = 'Recently played',
     items = { { title = 'Nothing here', value = 'ignore' } },
 }
 
