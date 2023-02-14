@@ -73,7 +73,7 @@ function on_load()
     if filename == title or filename_without_ext == title then
         title = ""
     end
-    append_item(path, filename_without_ext, title)
+    append_item(path, filename, title)
 end
 
 mp.add_key_binding(nil, "open", open_menu)
