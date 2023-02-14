@@ -78,6 +78,34 @@ function utf8_subwidth(str, indexStart, indexEnd)
     return substr
 end
 
+function is_same_folder(s1, s2, p1, p2)
+    local i1 = p1:find(s1, 1, true)
+    local i2 = p2:find(s2, 1, true)
+    if i1 and i2 then
+        local t1 = p1:sub(1, i1 - 1)
+        local t2 = p2:sub(1, i2 - 1)
+        return t1 == t2
+    end
+    return false
+end
+
+function is_same_series(s1, s2)
+    local ratio = 0.5
+    local limit = #s1 * ratio
+    local temp = ""
+    for start, char in utf8_iter(s1) do
+        local sub1 = char
+        local sub2 = s2:sub(start, start + #char - 1)
+        if sub1 ~= sub2 then
+            temp = temp .. sub1
+        end
+    end
+    if limit > #temp then
+        return true
+    end
+    return false
+end
+
 function append_item(path, filename, title)
     filename = utf8_subwidth(filename, 1, o.title_length)
     title = utf8_subwidth(title, 1, o.title_length)
@@ -85,7 +113,13 @@ function append_item(path, filename, title)
     local new_items = {}
     new_items[1] = { title = filename, hint = title, value = { "loadfile", path } }
     for index, value in ipairs(menu.items) do
-        if #new_items < o.length and value.value ~= "ignore" and value.value[2] ~= path then
+        local ofilename = value.title
+        local opath = value.value[2]
+        if #new_items < o.length and
+            value.value ~= "ignore" and
+            opath ~= path and
+            not (is_same_folder(filename, ofilename, path, opath) and is_same_series(filename, ofilename))
+        then
             new_items[#new_items + 1] = value
         end
     end
