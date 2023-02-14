@@ -4,7 +4,7 @@ local options = require("mp.options")
 local o = {
     path = "~~/recent.json",
     length = 10,
-    title_length = 25,
+    title_length = 48,
 }
 options.read_options(o)
 
@@ -65,21 +65,22 @@ function utf8_iter(str)
     end
 end
 
-function utf8_substring(str, indexStart, indexEnd)
+function utf8_subwidth(str, indexStart, indexEnd)
     local index = 1
     local substr = ""
     for _, char in utf8_iter(str) do
         if indexStart <= index and index <= indexEnd then
+            local width = #char > 2 and 2 or 1
+            index = index + width
             substr = substr .. char
-            index = index + 1
         end
     end
     return substr
 end
 
 function append_item(path, filename, title)
-    filename = utf8_substring(filename, 1, o.title_length)
-    title = utf8_substring(title, 1, o.title_length)
+    filename = utf8_subwidth(filename, 1, o.title_length)
+    title = utf8_subwidth(title, 1, o.title_length)
 
     local new_items = {}
     new_items[1] = { title = filename, hint = title, value = { "loadfile", path } }
