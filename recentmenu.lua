@@ -107,8 +107,12 @@ function is_same_series(s1, s2)
 end
 
 function append_item(path, filename, title)
-    filename = utf8_subwidth(filename, 1, o.title_length)
-    title = utf8_subwidth(title, 1, o.title_length)
+    if title and title ~= "" then
+        filename = utf8_subwidth(filename, 1, o.title_length * 1.2)
+        title = utf8_subwidth(title, 1, o.title_length * 0.8)
+    else
+        filename = utf8_subwidth(filename, 1, o.title_length * 2)
+    end
 
     local new_items = {}
     new_items[1] = { title = filename, hint = title, value = { "loadfile", path } }
