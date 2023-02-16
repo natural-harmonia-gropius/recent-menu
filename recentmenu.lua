@@ -171,6 +171,8 @@ function is_protocol(path)
     return type(path) == 'string' and (path:find('^%a[%a%d-_]+://') ~= nil or path:find('^%a[%a%d-_]+:\\?') ~= nil)
 end
 
+local current_item = { nil, nil, nil }
+
 function on_load()
     local path = mp.get_property("path")
     if not path then return end
@@ -183,11 +185,20 @@ function on_load()
     if is_protocol(path) and title and title ~= "" then
         filename, title = swap(filename, title)
     end
+    current_item = { path, filename, title }
     append_item(path, filename, title)
+end
+
+function on_end(e)
+    if e and e.reason and e.reason == "quit" then
+        read_json()
+        append_item(current_item[1], current_item[2], current_item[3])
+    end
 end
 
 mp.add_key_binding(nil, "open", open_menu)
 mp.add_key_binding(nil, "play_last", play_last)
 mp.register_event("file-loaded", on_load)
+mp.register_event("end-file", on_end)
 
 read_json()
