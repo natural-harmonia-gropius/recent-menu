@@ -5,7 +5,7 @@ It works, just works
 ```ini
 #                   script-binding recentmenu/open                      #! Recently played
 ```
-If you want an entry in the controls bar of uosc, you can add the following to the `controls=` entry in your `uosc.conf`:
+Add control button of uosc to document
 
 ```
 command:history:script-message-to recentmenu open?Recently played
