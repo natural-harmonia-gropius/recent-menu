@@ -166,13 +166,6 @@ function get_filename_without_ext(filename)
     return filename
 end
 
-function swap(a, b)
-    local t = a
-    a = b
-    b = t
-    return a, b
-end
-
 function is_protocol(path)
     return type(path) == 'string' and (path:find('^%a[%a%d-_]+://') ~= nil or path:find('^%a[%a%d-_]+:\\?') ~= nil)
 end
@@ -189,7 +182,7 @@ function on_load()
         title = ""
     end
     if is_protocol(path) and title and title ~= "" then
-        filename, title = swap(filename, title)
+        filename, title = title, filename
     end
     current_item = { path, filename, title }
     append_item(path, filename, title)
