@@ -137,8 +137,8 @@ function append_item(path, filename, title)
         filename = utf8_subwidth(filename, 1, o.width)
     end
 
-    local new_items = {}
-    new_items[1] = { title = filename, hint = title, value = { "loadfile", path } }
+    local new_items = { { title = filename, hint = title, value = { "loadfile", path } } }
+    read_json()
     for index, value in ipairs(menu.items) do
         local ofilename = value.title
         local opath = value.value[2]
@@ -196,7 +196,6 @@ end
 
 function on_end(e)
     if e and e.reason and e.reason == "quit" then
-        read_json()
         append_item(current_item[1], current_item[2], current_item[3])
     end
 end
