@@ -19,10 +19,16 @@ local menu = {
 
 function read_json()
     local meta, meta_error = utils.file_info(path)
-    if not meta or not meta.is_file then return end
+    if not meta or not meta.is_file then
+        menu.items = {}
+        return
+    end
 
     local json_file = io.open(path, "r")
-    if not json_file then return end
+    if not json_file then
+        menu.items = {}
+        return
+    end
 
     local json = json_file:read("*all")
     json_file:close()
