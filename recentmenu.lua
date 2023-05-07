@@ -175,7 +175,9 @@ function open_menu()
 end
 
 function play_last()
-    mp.command_native(menu.items[1].value)
+    if menu.items[1] then
+        mp.command_native(menu.items[1].value)
+    end
 end
 
 function on_load()
