@@ -175,6 +175,7 @@ function open_menu()
 end
 
 function play_last()
+    read_json()
     if menu.items[1] then
         mp.command_native(menu.items[1].value)
     end
@@ -206,5 +207,3 @@ mp.add_key_binding(nil, "open", open_menu)
 mp.add_key_binding(nil, "play_last", play_last)
 mp.register_event("file-loaded", on_load)
 mp.register_event("end-file", on_end)
-
-read_json()
