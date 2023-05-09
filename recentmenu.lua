@@ -19,6 +19,9 @@ local menu = {
 
 local current_item = { nil, nil, nil }
 
+local locale = {}
+function t(text) return locale[text] or text end
+
 function utf8_char_bytes(str, i)
     local char_byte = str:byte(i)
     if char_byte < 0xC0 then
@@ -232,3 +235,9 @@ mp.add_key_binding(nil, "open", open_menu)
 mp.add_key_binding(nil, "last", play_last)
 mp.register_event("file-loaded", on_load)
 mp.register_event("end-file", on_end)
+
+mp.commandv('script-message-to', 'uosc', 'get-locale', mp.get_script_name())
+mp.register_script_message('uosc-locale', function(json)
+    locale = utils.parse_json(json)
+    menu.title = t(menu.title)
+end)
