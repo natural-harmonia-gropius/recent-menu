@@ -153,7 +153,7 @@ function read_json()
     local json = json_file:read("*all")
     json_file:close()
 
-    menu.items = utils.parse_json(json)
+    menu.items = utils.parse_json(json) or {}
     remove_deleted()
 end
 
