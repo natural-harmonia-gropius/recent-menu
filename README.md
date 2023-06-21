@@ -4,18 +4,24 @@ Recently played menu for mpv integrated with uosc.
 
 ## Getting started
 
-[tomasklaen/uosc](https://github.com/tomasklaen/uosc) is required.
+**[tomasklaen/uosc](https://github.com/tomasklaen/uosc) is required.**
 
 [Menu](https://github.com/tomasklaen/uosc#adding-items-to-menu) - add following to `input.conf`.
 
 ```ini
-#                   script-binding recentmenu/open                      #! Recently played
+KEY                 script-binding recentmenu/open                      #! Recently played
 ```
 
 [Controls](https://github.com/tomasklaen/uosc#set-prop-value) - add following to `uosc.conf#controls`.
 
 ```ini
 command:history:script-message-to recentmenu open?Recently played
+```
+
+Play most recent one.
+
+```ini
+KEY                 script-binding recentmenu/last
 ```
 
 ## Options
