@@ -228,6 +228,6 @@ function on_end(e)
 end
 
 mp.add_key_binding(nil, "open", open_menu)
-mp.add_key_binding(nil, "play_last", play_last)
+mp.add_key_binding(nil, "last", play_last)
 mp.register_event("file-loaded", on_load)
 mp.register_event("end-file", on_end)
