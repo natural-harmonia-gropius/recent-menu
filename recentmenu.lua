@@ -208,6 +208,7 @@ end
 function on_load()
     local path = mp.get_property("path")
     if not path then return end
+    path = path:gsub("\\", "/")
     local filename = mp.get_property("filename")
     local filename_without_ext = get_filename_without_ext(filename)
     local title = mp.get_property("media-title") or path
