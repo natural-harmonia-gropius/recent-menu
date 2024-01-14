@@ -273,6 +273,7 @@ function write_json()
 
     json_file:write(json)
     json_file:close()
+    update_dyn_menu_items()
 end
 
 function append_item(path, filename, title)
@@ -306,8 +307,10 @@ function open_menu()
     mp.commandv('script-message-to', 'uosc', 'open-menu', json)
 end
 
-function dyn_menu_items()
-    read_json()
+function update_dyn_menu_items()
+    if #menu.items then
+        read_json()
+    end
     local submenu = {}
     local menu_items = menu.items
     for _, item in ipairs(menu_items) do
@@ -341,14 +344,12 @@ function on_load()
     end
     current_item = { path, filename, title }
     append_item(path, filename, title)
-    dyn_menu_items()
 end
 
 function on_end(e)
     if e and e.reason and e.reason == "quit" then
         append_item(current_item[1], current_item[2], current_item[3])
     end
-    dyn_menu_items()
 end
 
 mp.add_key_binding(nil, "open", open_menu)
@@ -362,4 +363,4 @@ mp.register_script_message('uosc-locale', function(json)
     menu.title = t(menu.title)
 end)
 
-mp.register_script_message('menu-ready', dyn_menu_items)
+mp.register_script_message('menu-ready', update_dyn_menu_items)
