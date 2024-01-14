@@ -53,6 +53,14 @@ function utf8_iter(str)
     end
 end
 
+function utf8_to_table(str)
+    local t = {}
+    for _, ch in utf8_iter(str) do
+        t[#t + 1] = ch
+    end
+    return t
+end
+
 function utf8_subwidth(str, indexStart, indexEnd)
     local index = 1
     local substr = ""
@@ -64,14 +72,6 @@ function utf8_subwidth(str, indexStart, indexEnd)
         end
     end
     return substr, index
-end
-
-function utf8_to_table(str)
-    local t = {}
-    for _, ch in utf8_iter(str) do
-        t[#t + 1] = ch
-    end
-    return t
 end
 
 function jaro(s1, s2)
