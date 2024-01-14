@@ -202,6 +202,10 @@ function get_dyn_menu_title(title, hint, path)
         return string.format('%s\t%s', title, protocol:upper())
     else
         local dir, filename, extension = split_path(path)
+        local filename_clip = utf8_subwidth(filename, 1, o.width)
+        if filename ~= filename_clip then
+            filename = filename_clip .. "..."
+        end
         return string.format('%s\t%s', filename, extension:upper())
     end
 end
