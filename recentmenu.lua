@@ -62,6 +62,10 @@ function utf8_to_table(str)
 end
 
 function utf8_subwidth(str, indexStart, indexEnd)
+    if indexStart > indexEnd then
+       return str
+    end
+
     local index = 1
     local substr = ""
     for _, char in utf8_iter(str) do
