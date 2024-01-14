@@ -1,8 +1,10 @@
 # Recent menu
 
-Recently played menu for mpv integrated with uosc.
+Recently played menu for mpv integrated with uosc and mpv-menu-plugin.
 
 ## Getting started
+
+### uosc
 
 **[tomasklaen/uosc](https://github.com/tomasklaen/uosc) is required.**
 
@@ -23,6 +25,21 @@ Play most recent one.
 ```ini
 KEY                 script-binding recentmenu/last
 ```
+
+### mpv-menu-plugin
+
+**[mpv-menu-plugin](https://github.com/tsl0922/mpv-menu-plugin) is required.**
+
+[Menu](https://github.com/tsl0922/mpv-menu-plugin?tab=readme-ov-file#messages) - add following to `input.conf`.
+
+```ini
+KEY                 script-binding recentmenu/open                      #! Recently played  #@recent
+```
+> [!NOTE]
+> Due to the limitations of mpv-menu-plugin itself, attention should be paid to:
+>
+> - The menu will not update when the file is deleted
+> - Multiple mpv instances may have inconsistent menus
 
 ## Options
 
