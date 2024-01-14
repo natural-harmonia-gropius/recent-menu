@@ -199,15 +199,17 @@ end
 function get_dyn_menu_title(title, hint, path)
     if is_protocol(path) then
         local protocol = path:match("^(%a[%w.+-]-)://")
-        return string.format('%s\t%s', title, protocol:upper())
+        hint = protocol
     else
         local dir, filename, extension = split_path(path)
-        local filename_clip = utf8_subwidth(filename, 1, o.width)
-        if filename ~= filename_clip then
-            filename = filename_clip .. "..."
-        end
-        return string.format('%s\t%s', filename, extension:upper())
+        title = filename
+        hint = extension
     end
+    local title_clip = utf8_subwidth(title, 1, o.width)
+    if title ~= title_clip then
+        title = utf8_subwidth(title_clip, 1, o.width - 2) .. "..."
+    end
+    return string.format('%s\t%s', title, hint:upper())
 end
 
 function remove_deleted()
