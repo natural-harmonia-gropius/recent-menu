@@ -293,7 +293,7 @@ function open_menu()
 end
 
 function update_dyn_menu_items()
-    if #menu.items then
+    if #menu.items == 0 then
         read_json()
     end
     local submenu = {}
