@@ -154,46 +154,40 @@ function jaro_winkler_distance(s1, s2)
     return d + l * p * (1 - d)
 end
 
+function split_path(path)
+    -- return path, filename, extension
+    return path:match("(.-)([^\\/]-)%.?([^%.\\/]*)$")
+end
+
 function is_protocol(path)
     return type(path) == 'string' and (path:find('^%a[%w.+-]-://') ~= nil or path:find('^%a[%w.+-]-:%?') ~= nil)
 end
 
-function is_same_folder(s1, s2, p1, p2)
-    local i1 = p1:find(s1, 1, true)
-    local i2 = p2:find(s2, 1, true)
-    if i1 and i2 then
-        local t1 = p1:sub(1, i1 - 1)
-        local t2 = p2:sub(1, i2 - 1)
-        return t1 == t2, p1:sub(i1, #p1), p2:sub(i2, #p2)
-    end
-    return false
-end
-
-function is_same_series(s1, s2, p1, p2)
+function is_same_series(path1, path2)
     if not o.ignore_same_series then
         return false
     end
 
-    local _is_same_folder, f1, f2 = is_same_folder(s1, s2, p1, p2)
-    if _is_same_folder and f1 and f2 then
-        f1 = get_filename_without_ext(f1)
-        f2 = get_filename_without_ext(f2)
+    local dir1, filename1, extension1 = split_path(path1)
+    local dir2, filename2, extension2 = split_path(path2)
 
+    -- in same folder
+    if dir1 == dir2 then
         -- same filename but different extensions
-        if f1 == f2 then
+        if filename1 == filename2 then
             return false
         end
 
         -- by episode
-        local sub1 = f1:gsub("^[%[%(]+.-[%]%)]+[%s%[]*", ""):match("(.-%D+)0*%d+")
-        local sub2 = f2:gsub("^[%[%(]+.-[%]%)]+[%s%[]*", ""):match("(.-%D+)0*%d+")
-        if sub1 and sub2 and sub1 == sub2 then
+        local episode1 = filename1:gsub("^[%[%(]+.-[%]%)]+[%s%[]*", ""):match("(.-%D+)0*%d+")
+        local episode2 = filename2:gsub("^[%[%(]+.-[%]%)]+[%s%[]*", ""):match("(.-%D+)0*%d+")
+        if episode1 and episode2 and episode1 == episode2 then
             return true
         end
 
         -- by similarity
         local threshold = 0.8
-        local similarity = jaro_winkler_distance(f1, f2)
+        local similarity = jaro_winkler_distance(filename1, filename2)
         if similarity > threshold then
             return true
         end
@@ -202,24 +196,13 @@ function is_same_series(s1, s2, p1, p2)
     return false
 end
 
-function get_filename_without_ext(filename)
-    local idx = filename:match(".+()%.%w+$")
-    if idx then
-        filename = filename:sub(1, idx - 1)
-    end
-    return filename
-end
-
 function get_dyn_menu_title(title, hint, path)
     if is_protocol(path) then
         local protocol = path:match("^(%a[%w.+-]-)://")
         return string.format('%s\t%s', title, protocol:upper())
     else
-        local ext = path:match(".+%.(%w+)$")
-        local file_name_index = path:find(title, 1, true)
-        local file_name = path:sub(file_name_index, #path)
-        file_name = get_filename_without_ext(file_name)
-        return string.format('%s\t%s', file_name, ext:upper())
+        local dir, filename, extension = split_path(path)
+        return string.format('%s\t%s', filename, extension:upper())
     end
 end
 
@@ -294,7 +277,7 @@ function append_item(path, filename, title)
         local opath = value.value[2]
         if #new_items < o.length and
             opath ~= path and
-            not is_same_series(filename, ofilename, path, opath)
+            not is_same_series(path, opath)
         then
             new_items[#new_items + 1] = value
         end
@@ -336,7 +319,7 @@ function on_load()
     local path = mp.get_property("path")
     if not path then return end
     local filename = mp.get_property("filename")
-    local filename_without_ext = get_filename_without_ext(filename)
+    local dir, filename_without_ext, ext = split_path(filename)
     local title = mp.get_property("media-title") or path
     if filename == title or filename_without_ext == title then
         title = ""
