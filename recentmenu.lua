@@ -216,8 +216,10 @@ function get_dyn_menu_title(title, hint, path)
         return string.format('%s\t%s', title, protocol:upper())
     else
         local ext = path:match(".+%.(%w+)$")
-        if #title < #hint then title = hint end
-        return string.format('%s\t%s', get_filename_without_ext(title), ext:upper())
+        local file_name_index = path:find(title, 1, true)
+        local file_name = path:sub(file_name_index, #path)
+        file_name = get_filename_without_ext(file_name)
+        return string.format('%s\t%s', file_name, ext:upper())
     end
 end
 
