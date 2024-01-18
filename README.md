@@ -27,7 +27,7 @@ command:history:script-message-to recentmenu open?Recently played
 [Menu](https://github.com/tsl0922/mpv-menu-plugin?tab=readme-ov-file#messages) - add following to `input.conf`.
 
 ```ini
-KEY                 ignore                                              #menu: Recently played  #@recent
+KEY                 ignore                                  #menu: Recently played  #@recent
 ```
 
 > [!NOTE]
