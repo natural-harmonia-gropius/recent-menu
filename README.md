@@ -20,12 +20,6 @@ KEY                 script-binding recentmenu/open                      #! Recen
 command:history:script-message-to recentmenu open?Recently played
 ```
 
-Play most recent one.
-
-```ini
-KEY                 script-binding recentmenu/last
-```
-
 ### mpv-menu-plugin
 
 **[mpv-menu-plugin](https://github.com/tsl0922/mpv-menu-plugin) is required.**
@@ -33,13 +27,22 @@ KEY                 script-binding recentmenu/last
 [Menu](https://github.com/tsl0922/mpv-menu-plugin?tab=readme-ov-file#messages) - add following to `input.conf`.
 
 ```ini
-KEY                 script-binding recentmenu/open                      #! Recently played  #@recent
+KEY                 ignore                                              #menu: Recently played  #@recent
 ```
+
 > [!NOTE]
 > Due to the limitations of mpv-menu-plugin itself, attention should be paid to:
 >
 > - The menu will not update when the file is deleted
 > - Multiple mpv instances may have inconsistent menus
+
+### Unrelated
+
+Play most recent one.
+
+```ini
+KEY                 script-binding recentmenu/last
+```
 
 ## Options
 
