@@ -61,7 +61,7 @@ function utf8_to_table(str)
     return t
 end
 
-function utf8_subwidth(str, indexStart, indexEnd)
+function utf8_substring(str, indexStart, indexEnd)
     if indexStart > indexEnd then
         return str
     end
@@ -211,9 +211,9 @@ function get_dyn_menu_title(title, hint, path)
         title = filename
         hint = extension
     end
-    local title_clip = utf8_subwidth(title, 1, o.width)
+    local title_clip = utf8_substring(title, 1, o.width)
     if title ~= title_clip then
-        title = utf8_subwidth(title_clip, 1, o.width - 2) .. "..."
+        title = utf8_substring(title_clip, 1, o.width - 2) .. "..."
     end
     return string.format('%s\t%s', title, hint:upper())
 end
@@ -332,10 +332,10 @@ function on_load()
     end
     if title and title ~= "" then
         local width
-        filename, width = utf8_subwidth(filename, 1, o.width * 0.618)
-        title = utf8_subwidth(title, 1, o.width - width)
+        filename, width = utf8_substring(filename, 1, o.width * 0.618)
+        title = utf8_substring(title, 1, o.width - width)
     else
-        filename = utf8_subwidth(filename, 1, o.width)
+        filename = utf8_substring(filename, 1, o.width)
     end
     current_item = { path, filename, title }
     append_item(unpack(current_item))
