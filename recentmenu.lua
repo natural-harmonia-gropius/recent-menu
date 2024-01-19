@@ -18,6 +18,7 @@ local menu = {
 }
 
 local dyn_menu = {
+    ready = false,
     type = 'submenu',
     submenu = {}
 }
@@ -254,7 +255,10 @@ function write_json()
 
     json_file:write(json)
     json_file:close()
-    update_dyn_menu_items()
+
+    if dyn_menu.ready then
+        update_dyn_menu_items()
+    end
 end
 
 function append_item(path, filename, title)
@@ -363,4 +367,7 @@ mp.register_script_message('uosc-locale', function(json)
     menu.title = t(menu.title)
 end)
 
-mp.register_script_message('menu-ready', update_dyn_menu_items)
+mp.register_script_message('menu-ready', function()
+    dyn_menu.ready = true
+    update_dyn_menu_items()
+end)
