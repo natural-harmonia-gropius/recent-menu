@@ -319,6 +319,7 @@ function play_last()
 end
 
 function on_load()
+    current_item = { nil, nil, nil }
     local path = mp.get_property("path")
     if not path then return end
     local filename = mp.get_property("filename")
@@ -343,6 +344,9 @@ end
 
 function on_end(e)
     if not (e and e.reason and e.reason == "quit") then
+        return
+    end
+    if not current_item[1] then
         return
     end
     append_item(unpack(current_item))
