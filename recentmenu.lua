@@ -202,22 +202,6 @@ function is_same_series(path1, path2)
     return false
 end
 
-function get_dyn_menu_title(title, hint, path)
-    if is_protocol(path) then
-        local protocol = path:match("^(%a[%w.+-]-)://")
-        hint = protocol
-    else
-        local dir, filename, extension = split_path(path)
-        title = filename
-        hint = extension
-    end
-    local title_clip = utf8_substring(title, 1, o.width)
-    if title ~= title_clip then
-        title = utf8_substring(title_clip, 1, o.width - 2) .. "..."
-    end
-    return string.format('%s\t%s', title, hint:upper())
-end
-
 function remove_deleted()
     local new_items = {}
     for _, item in ipairs(menu.items) do
@@ -293,6 +277,22 @@ function open_menu()
     read_json()
     local json = utils.format_json(menu)
     mp.commandv('script-message-to', 'uosc', 'open-menu', json)
+end
+
+function get_dyn_menu_title(title, hint, path)
+    if is_protocol(path) then
+        local protocol = path:match("^(%a[%w.+-]-)://")
+        hint = protocol
+    else
+        local dir, filename, extension = split_path(path)
+        title = filename
+        hint = extension
+    end
+    local title_clip = utf8_substring(title, 1, o.width)
+    if title ~= title_clip then
+        title = utf8_substring(title_clip, 1, o.width - 2) .. "..."
+    end
+    return string.format('%s\t%s', title, hint:upper())
 end
 
 function update_dyn_menu_items()
