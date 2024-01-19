@@ -274,14 +274,6 @@ function write_json()
 end
 
 function append_item(path, filename, title)
-    if title and title ~= "" then
-        local width
-        filename, width = utf8_subwidth(filename, 1, o.width * 0.618)
-        title = utf8_subwidth(title, 1, o.width - width)
-    else
-        filename = utf8_subwidth(filename, 1, o.width)
-    end
-
     local new_items = { { title = filename, hint = title, value = { "loadfile", path } } }
     read_json()
     for index, value in ipairs(menu.items) do
@@ -338,14 +330,22 @@ function on_load()
     if is_protocol(path) and title and title ~= "" then
         filename, title = title, filename
     end
+    if title and title ~= "" then
+        local width
+        filename, width = utf8_subwidth(filename, 1, o.width * 0.618)
+        title = utf8_subwidth(title, 1, o.width - width)
+    else
+        filename = utf8_subwidth(filename, 1, o.width)
+    end
     current_item = { path, filename, title }
-    append_item(path, filename, title)
+    append_item(unpack(current_item))
 end
 
 function on_end(e)
-    if e and e.reason and e.reason == "quit" then
-        append_item(current_item[1], current_item[2], current_item[3])
+    if not (e and e.reason and e.reason == "quit") then
+        return
     end
+    append_item(unpack(current_item))
 end
 
 mp.add_key_binding(nil, "open", open_menu)
