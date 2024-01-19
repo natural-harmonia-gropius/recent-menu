@@ -47,6 +47,7 @@ KEY                 script-binding recentmenu/last
 ## Options
 
 ```ini
+enabled = yes                           # whether to record current playing file, can be used with auto-profile
 path = "~~/recent.json"                 # where the history is stored
 length = 10                             # number of items
 width = 88                              # number of characters for the item

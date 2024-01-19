@@ -2,12 +2,13 @@ local utils = require("mp.utils")
 local options = require("mp.options")
 
 local o = {
+    enabled = true,
     path = "~~/recent.json",
     length = 10,
     width = 88,
     ignore_same_series = true,
 }
-options.read_options(o)
+options.read_options(o, _, function() end)
 
 local path = mp.command_native({ "expand-path", o.path })
 
@@ -324,6 +325,7 @@ end
 
 function on_load()
     current_item = { nil, nil, nil }
+    if not o.enabled then return end
     local path = mp.get_property("path")
     if not path then return end
     local filename = mp.get_property("filename")
