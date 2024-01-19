@@ -63,7 +63,7 @@ end
 
 function utf8_subwidth(str, indexStart, indexEnd)
     if indexStart > indexEnd then
-       return str
+        return str
     end
 
     local index = 1
@@ -175,26 +175,28 @@ function is_same_series(path1, path2)
     local dir1, filename1, extension1 = split_path(path1)
     local dir2, filename2, extension2 = split_path(path2)
 
-    -- in same folder
-    if dir1 == dir2 then
-        -- same filename but different extensions
-        if filename1 == filename2 then
-            return false
-        end
+    -- don't remove files are not in same folder
+    if dir1 ~= dir2 then
+        return false
+    end
 
-        -- by episode
-        local episode1 = filename1:gsub("^[%[%(]+.-[%]%)]+[%s%[]*", ""):match("(.-%D+)0*%d+")
-        local episode2 = filename2:gsub("^[%[%(]+.-[%]%)]+[%s%[]*", ""):match("(.-%D+)0*%d+")
-        if episode1 and episode2 and episode1 == episode2 then
-            return true
-        end
+    -- don't remove same filename but different extensions
+    if filename1 == filename2 then
+        return false
+    end
 
-        -- by similarity
-        local threshold = 0.8
-        local similarity = jaro_winkler_distance(filename1, filename2)
-        if similarity > threshold then
-            return true
-        end
+    -- by episode
+    local episode1 = filename1:gsub("^[%[%(]+.-[%]%)]+[%s%[]*", ""):match("(.-%D+)0*%d+")
+    local episode2 = filename2:gsub("^[%[%(]+.-[%]%)]+[%s%[]*", ""):match("(.-%D+)0*%d+")
+    if episode1 and episode2 and episode1 == episode2 then
+        return true
+    end
+
+    -- by similarity
+    local threshold = 0.8
+    local similarity = jaro_winkler_distance(filename1, filename2)
+    if similarity > threshold then
+        return true
     end
 
     return false
@@ -283,10 +285,9 @@ function append_item(path, filename, title)
     local new_items = { { title = filename, hint = title, value = { "loadfile", path } } }
     read_json()
     for index, value in ipairs(menu.items) do
-        local ofilename = value.title
         local opath = value.value[2]
         if #new_items < o.length and
-            opath ~= path and
+            path ~= opath and
             not is_same_series(path, opath)
         then
             new_items[#new_items + 1] = value
