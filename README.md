@@ -1,8 +1,25 @@
 # Recent menu
 
-Recently played menu for mpv integrated with uosc and mpv-menu-plugin.
+Recently played menu for mpv.
 
 ## Getting started
+
+### Context Menu
+
+**[tsl0922/mpv-menu-plugin/dyn_menu.lua](https://github.com/tsl0922/mpv-menu-plugin/blob/main/src/lua/dyn_menu.lua) is required.**
+
+[Menu](https://github.com/tsl0922/mpv-menu-plugin/wiki/Configuration) - add following to `input.conf`.
+
+```ini
+_                   ignore                                  #menu: Recently played  #@recent
+```
+
+> [!WARNING]
+>
+> **Due to the limitations of context-menu (mpv-menu-plugin), the menu may show unexpected results**
+>
+> - The menu will not be updated in time when the file is deleted
+> - The menu will be inconsistent when multiple mpv instances work at the same time
 
 ### uosc
 
@@ -11,7 +28,7 @@ Recently played menu for mpv integrated with uosc and mpv-menu-plugin.
 [Menu](https://github.com/tomasklaen/uosc#adding-items-to-menu) - add following to `input.conf`.
 
 ```ini
-KEY                 script-binding recentmenu/open                      #! Recently played
+#                   script-binding recentmenu/open                      #! Recently played
 ```
 
 [Controls](https://github.com/tomasklaen/uosc#set-prop-value) - add following to `uosc.conf#controls`.
@@ -20,23 +37,7 @@ KEY                 script-binding recentmenu/open                      #! Recen
 command:history:script-message-to recentmenu open?Recently played
 ```
 
-### mpv-menu-plugin
-
-**[mpv-menu-plugin](https://github.com/tsl0922/mpv-menu-plugin) is required.**
-
-[Menu](https://github.com/tsl0922/mpv-menu-plugin?tab=readme-ov-file#messages) - add following to `input.conf`.
-
-```ini
-KEY                 ignore                                  #menu: Recently played  #@recent
-```
-
-> [!NOTE]
-> Due to the limitations of mpv-menu-plugin itself, attention should be paid to:
->
-> - The menu will not update when the file is deleted
-> - Multiple mpv instances may have inconsistent menus
-
-### Unrelated
+### General
 
 Play most recent one.
 
