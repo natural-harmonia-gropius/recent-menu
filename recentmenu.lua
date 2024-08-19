@@ -1,5 +1,6 @@
 local utils = require("mp.utils")
 local options = require("mp.options")
+local input_available, input = pcall(require, "mp.input")
 
 local o = {
     enabled = true,
@@ -11,6 +12,8 @@ local o = {
 options.read_options(o, _, function() end)
 
 local path = mp.command_native({ "expand-path", o.path })
+
+local uosc_available = false
 
 local menu = {
     type = 'recent_menu',
@@ -269,8 +272,25 @@ end
 
 function open_menu()
     read_json()
-    local json = utils.format_json(menu)
-    mp.commandv('script-message-to', 'uosc', 'open-menu', json)
+    if uosc_available then
+        local json = utils.format_json(menu)
+        mp.commandv('script-message-to', 'uosc', 'open-menu', json)
+    elseif input_available then
+        local item_titles, item_values = {}, {}
+        for i, v in ipairs(menu.items) do
+            item_titles[i] = v.title
+            item_values[i] = v.value
+        end
+        mp.commandv('script-message-to', 'console', 'disable')
+        input.select({
+            prompt = menu.title .. ':',
+            items = item_titles,
+            default_item = 1,
+            submit = function (id)
+                mp.commandv(unpack(item_values[id]))
+            end,
+        })
+    end
 end
 
 function get_dyn_menu_title(title, hint, path)
@@ -353,6 +373,7 @@ mp.add_key_binding(nil, "last", play_last)
 mp.register_event("file-loaded", on_load)
 mp.register_event("end-file", on_end)
 
+mp.register_script_message('uosc-version', function() uosc_available = true end)
 mp.commandv('script-message-to', 'uosc', 'get-locale', mp.get_script_name())
 mp.register_script_message('uosc-locale', function(json)
     locale = utils.parse_json(json)
