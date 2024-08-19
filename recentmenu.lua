@@ -20,6 +20,7 @@ local menu = {
 
 local dyn_menu = {
     ready = false,
+    script_name = 'dyn_menu',
     type = 'submenu',
     submenu = {}
 }
@@ -301,7 +302,7 @@ function update_dyn_menu_items()
         }
     end
     dyn_menu.submenu = submenu
-    mp.commandv('script-message-to', 'dyn_menu', 'update', 'recent', utils.format_json(dyn_menu))
+    mp.commandv('script-message-to', dyn_menu.script_name, 'update', 'recent', utils.format_json(dyn_menu))
 end
 
 function play_last()
@@ -358,7 +359,8 @@ mp.register_script_message('uosc-locale', function(json)
     menu.title = t(menu.title)
 end)
 
-mp.register_script_message('menu-ready', function()
+mp.register_script_message('menu-ready', function(script_name)
     dyn_menu.ready = true
+    dyn_menu.script_name = script_name
     update_dyn_menu_items()
 end)
