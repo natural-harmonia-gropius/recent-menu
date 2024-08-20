@@ -4,23 +4,6 @@ Recently played menu for mpv.
 
 ## Getting started
 
-### Context Menu
-
-**[tsl0922/mpv-menu-plugin/dyn_menu.lua](https://github.com/tsl0922/mpv-menu-plugin/blob/main/src/lua/dyn_menu.lua) is required.**
-
-[Menu](https://github.com/tsl0922/mpv-menu-plugin/wiki/Configuration) - add following to `input.conf`.
-
-```ini
-_                   ignore                                  #menu: Recently played  #@recent
-```
-
-> [!WARNING]
->
-> **Due to the limitations of context-menu (mpv-menu-plugin), the menu may show unexpected results**
->
-> - The menu will not be updated in time when the file is deleted
-> - The menu will be inconsistent when multiple mpv instances work at the same time
-
 ### uosc
 
 **[tomasklaen/uosc](https://github.com/tomasklaen/uosc) is required.**
@@ -31,11 +14,39 @@ _                   ignore                                  #menu: Recently play
 #                   script-binding recentmenu/open                      #! Recently played
 ```
 
-[Controls](https://github.com/tomasklaen/uosc#set-prop-value) - add following to `uosc.conf#controls`.
+[Controls](https://github.com/tomasklaen/uosc#set-prop-value) - add following to `uosc.conf - controls`.
 
 ```ini
 command:history:script-message-to recentmenu open?Recently played
 ```
+
+### select.lua
+
+**It’s a built-in script of mpv that was added in [#14087](https://github.com/mpv-player/mpv/pull/14087).**
+
+[Keybind](https://mpv.io/manual/master/#input-conf) - add following to `input.conf`.
+
+```ini
+z                   script-binding recentmenu/open                      #! Recently played
+```
+
+### Context Menu
+
+**[tsl0922/mpv-menu-plugin/dyn_menu.lua](https://github.com/tsl0922/mpv-menu-plugin/blob/main/src/lua/dyn_menu.lua) is required.**
+
+[Menu](https://github.com/tsl0922/mpv-menu-plugin/wiki/Configuration) - add following to `input.conf`.
+
+```ini
+MBTN_RIGHT          context-menu
+_                   ignore                                  #menu: Recently played  #@recent
+```
+
+> [!WARNING]
+>
+> **Due to the limitations of context-menu (mpv-menu-plugin), the menu may show unexpected results.**
+>
+> - The menu will not be updated in time when the file is deleted
+> - The menu will be inconsistent when multiple mpv instances work at the same time
 
 ### General
 
