@@ -286,7 +286,7 @@ function open_menu()
             prompt = menu.title .. ':',
             items = item_titles,
             default_item = 1,
-            submit = function (id)
+            submit = function(id)
                 mp.commandv(unpack(item_values[id]))
             end,
         })
