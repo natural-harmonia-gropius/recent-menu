@@ -20,7 +20,21 @@ Recently played menu for mpv.
 command:history:script-message-to recentmenu open?Recently played
 ```
 
-### select.lua
+### command_palette
+
+**[stax76/mpv-scripts/command_palette](https://github.com/stax76/mpv-scripts?tab=readme-ov-file#command_palette) is required.**
+
+```ini
+z                   script-binding recentmenu/open                      #! Recently played
+```
+
+or
+
+```ini
+z                   script-message-to command_palette show-command-palette "Recent Files"   # Recent Files
+```
+
+### select
 
 **It’s a built-in script of mpv that was added in [#14087](https://github.com/mpv-player/mpv/pull/14087).**
 
@@ -56,6 +70,14 @@ Play most recent one.
 KEY                 script-binding recentmenu/last
 ```
 
+Use the specified menu provider
+
+```ini
+KEY                 script-message-to recentmenu open-recent-menu uosc
+KEY                 script-message-to recentmenu open-recent-menu command-palette
+KEY                 script-message-to recentmenu open-recent-menu select
+```
+
 ## Options
 
 ```ini
@@ -64,4 +86,5 @@ path = "~~/recent.json"                 # where the history is stored
 length = 10                             # number of items
 width = 88                              # number of characters for the item
 ignore_same_series = yes                # similar file names only record the most recent one
+reduce_io = no                          # reduce the number of JSON reads and writes. but menu may show unexpected results.
 ```
