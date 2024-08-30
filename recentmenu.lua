@@ -8,6 +8,7 @@ local o = {
     length = 10,
     width = 88,
     ignore_same_series = true,
+    reduce_io = false,
 }
 options.read_options(o, _, function() end)
 
@@ -220,7 +221,10 @@ function remove_deleted()
     end
 end
 
-function read_json()
+function read_json(force)
+    if o.reduce_io and not force then
+        return
+    end
     local meta, meta_error = utils.file_info(path)
     if not meta or not meta.is_file then
         menu.items = {}
@@ -240,7 +244,10 @@ function read_json()
     remove_deleted()
 end
 
-function write_json()
+function write_json(force)
+    if o.reduce_io and not force then
+        return
+    end
     local json_file = io.open(path, "w")
     if not json_file then return end
 
@@ -387,3 +394,10 @@ mp.register_script_message('menu-ready', function(script_name)
     dyn_menu.script_name = script_name
     update_dyn_menu_items()
 end)
+
+if o.reduce_io then
+    read_json(true)
+    mp.register_event("shutdown", function (e)
+        write_json(true)
+    end)
+end
