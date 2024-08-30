@@ -15,6 +15,7 @@ options.read_options(o, _, function() end)
 local path = mp.command_native({ "expand-path", o.path })
 
 local uosc_available = false
+local command_palette_available = false
 
 local menu = {
     type = 'recent_menu',
@@ -277,27 +278,50 @@ function append_item(path, filename, title)
     write_json()
 end
 
+function open_menu_uosc()
+    local json = utils.format_json(menu)
+    mp.commandv('script-message-to', 'uosc', 'open-menu', json)
+end
+
+function open_menu_command_palette()
+    local json = utils.format_json(menu)
+    mp.commandv('script-message-to',
+        'command_palette',
+        'show-command-palette-json', json)
+end
+
+function open_menu_select()
+    local item_titles, item_values = {}, {}
+    for i, v in ipairs(menu.items) do
+        item_titles[i] = v.title
+        item_values[i] = v.value
+    end
+    mp.commandv('script-message-to', 'console', 'disable')
+    input.select({
+        prompt = menu.title .. ':',
+        items = item_titles,
+        default_item = 1,
+        submit = function(id)
+            mp.commandv(unpack(item_values[id]))
+        end,
+    })
+end
+
 function open_menu()
     read_json()
     if uosc_available then
-        local json = utils.format_json(menu)
-        mp.commandv('script-message-to', 'uosc', 'open-menu', json)
-    elseif input_available then
-        local item_titles, item_values = {}, {}
-        for i, v in ipairs(menu.items) do
-            item_titles[i] = v.title
-            item_values[i] = v.value
-        end
-        mp.commandv('script-message-to', 'console', 'disable')
-        input.select({
-            prompt = menu.title .. ':',
-            items = item_titles,
-            default_item = 1,
-            submit = function(id)
-                mp.commandv(unpack(item_values[id]))
-            end,
-        })
+        open_menu_uosc()
+        return
     end
+    if command_palette_available then
+        open_menu_command_palette()
+        return
+    end
+    if input_available then
+        open_menu_select()
+        return
+    end
+    mp.msg.warn("No menu providers available")
 end
 
 function get_dyn_menu_title(title, hint, path)
@@ -387,6 +411,10 @@ end)
 mp.register_script_message('uosc-locale', function(json)
     locale = utils.parse_json(json)
     menu.title = t(menu.title)
+end)
+
+mp.register_script_message('command-palette-version', function()
+    command_palette_available = true
 end)
 
 mp.register_script_message('menu-ready', function(script_name)
