@@ -311,17 +311,14 @@ function open_menu()
     read_json()
     if uosc_available then
         open_menu_uosc()
-        return
-    end
-    if command_palette_available then
+    elseif command_palette_available then
         open_menu_command_palette()
-        return
-    end
-    if input_available then
+    elseif input_available then
         open_menu_select()
         return
+    else
+        mp.msg.warn("No menu providers available")
     end
-    mp.msg.warn("No menu providers available")
 end
 
 function get_dyn_menu_title(title, hint, path)
@@ -414,7 +411,7 @@ mp.register_script_message('open-recent-menu', function(provider)
     elseif provider == "select" then
         open_menu_select()
     else
-        mp.msg.warn(provider + "not available")
+        mp.msg.warn(provider .. " not available")
     end
 end)
 
