@@ -397,6 +397,20 @@ mp.add_key_binding(nil, "last", play_last)
 mp.register_event("file-loaded", on_load)
 mp.register_event("end-file", on_end)
 
+mp.register_script_message('open-recent-menu', function(provider)
+    if provider == nil then
+        open_menu()
+    elseif provider == "uosc" then
+        open_menu_uosc()
+    elseif provider == "command-palette" then
+        open_menu_command_palette()
+    elseif provider == "select" then
+        open_menu_select()
+    else
+        mp.msg.warn(provider + "not available")
+    end
+end)
+
 mp.register_script_message('uosc-version', function()
     uosc_available = true
     mp.commandv('script-message-to', 'uosc', 'get-locale', mp.get_script_name())
