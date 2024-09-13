@@ -436,7 +436,7 @@ end)
 
 if o.reduce_io then
     read_json(true)
-    mp.register_event("shutdown", function (e)
+    mp.register_event("shutdown", function(e)
         write_json(true)
     end)
 end
