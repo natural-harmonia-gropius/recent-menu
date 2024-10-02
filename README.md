@@ -84,7 +84,6 @@ KEY                 script-message-to recentmenu open-recent-menu select
 enabled = yes                           # whether to record current playing file, can be used with auto-profile
 path = "~~/recent.json"                 # where the history is stored
 length = 10                             # number of items
-width = 88                              # number of characters for the item
 ignore_same_series = yes                # similar file names only record the most recent one
 reduce_io = no                          # reduce the number of JSON reads and writes. but menu may show unexpected results.
 ```
