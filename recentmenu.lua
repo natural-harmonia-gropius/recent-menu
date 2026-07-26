@@ -8,6 +8,7 @@ local o = {
     length = 10,
     ignore_same_series = true,
     reduce_io = false,
+    append_playlist = false,
 }
 options.read_options(o, _, function() end)
 
@@ -269,6 +270,24 @@ function append_item(path, title, hint)
     write_json()
 end
 
+function append_playlist()
+    if not o.append_playlist then
+        return
+    end
+
+    local path = mp.get_property("playlist-path")
+
+    if not path then
+        return
+    end
+
+    local hint = os.date("%m/%d %H:%M")
+    hint = "Playlist" .. " | " .. hint
+    hint = hint:upper()
+
+    append_item(path, path, hint)
+end
+
 function remove_item(index)
     table.remove(menu.items, index)
     local json = utils.format_json(menu)
@@ -367,6 +386,7 @@ function on_load()
     hint = hint:upper()
     current_item = { path, title, hint }
     append_item(unpack(current_item))
+    append_playlist()
 end
 
 function on_end(e)
@@ -377,6 +397,7 @@ function on_end(e)
         return
     end
     append_item(unpack(current_item))
+    append_playlist()
 end
 
 mp.add_key_binding(nil, "open", open_menu)
